@@ -6,6 +6,13 @@ import os
 
 PADX = 10
 
+"""
+Create a GUI executable to run without an IDE:
+-> uv pip install pyinstaller
+-> pyinstaller --onefile --noconsole GUI/gui_test.py
+-> Afterwards delete 'build' and 'gui_test.spec'
+"""
+
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 
 root = tk.Tk()
