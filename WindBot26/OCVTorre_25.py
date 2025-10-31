@@ -225,14 +225,15 @@ try:
             mode='markers',
             marker=dict(size=4, color=Z_sample, colorscale='Inferno', colorbar=dict(title='Profundidade Torre'))
         )])
+
         fig.update_layout(
             scene=dict(
                 xaxis_title='X',
                 yaxis_title='Y',
                 zaxis_title='Profundidade Torre',
-                xaxis=dict(range=[0,1280]),
-                yaxis=dict(range=[0,720]),
-                zaxis=dict(range=[np.min(Z_sample), np.max(Z_sample)]),
+                #xaxis=dict(range=[0,1280]),
+                #yaxis=dict(range=[0,720]),
+                #zaxis=dict(range=[np.min(Z_sample), np.max(Z_sample)]),
                 camera=dict(eye=dict(x=0, y=2, z=0.5))
             ),
             autosize=True,

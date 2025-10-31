@@ -32,7 +32,6 @@ BAG_FILE = "Bag_Scan_Porta.bag"
 output_dir = os.path.join(os.path.dirname(__file__), "GeneratedFiles_OCVPorta_25")
 os.makedirs(output_dir, exist_ok=True)
 
-
 def set_axes_equal(ax):
     """Make axes of 3D plot have equal scale so that spheres appear as spheres, cubes as cubes, etc.
     Input ax: a matplotlib axis, e.g., as output from plt.gca()."""
