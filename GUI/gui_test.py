@@ -1,25 +1,61 @@
 import tkinter as tk
-from tkinter import messagebox
 
-""" Simple GUI Application using Tkinter """
+root = tk.Tk()
+root.tk.call('tk', 'scaling', 1.0)  # Set scaling to default
+root.title("WindBot'26")
+root.configure(bg="#1e1e1e")
+root.geometry("800x800")
 
-""" Functions """
-#def on_click():
-#    messagebox.showinfo("Hello", f"Hello, {entry.get()}!")
+def capturar_porta():
+    pass
 
-""" Window Setup """
-root = tk.Tk() # Create the main window
-root.title("WindBot'26") # Application Title
-root.configure(bg="#1e1e1e") # Dark background
-root.geometry("800x800") # Window size
+def capturar_torre():
+    pass
 
-""" Widgets """
-#label = tk.Label(root, text="Enter your name:")
-#label.pack(pady=5)
-#entry = tk.Entry(root) # Input field
-#entry.pack(pady=5) # Padding for better layout
+def processar_porta():
+    pass
 
-button = tk.Button(root, text="Greet Me", command=on_click)
-button.pack(pady=10)
+def processar_torre():
+    pass
+
+""" Captura da Porta """
+label1 = tk.Label(root, text="Iniciar Captura da Porta", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+label1.pack(pady=5, fill='x')
+
+button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 24), bg="#333", fg="#fff")
+button1.pack(pady=10)
+""" --------------------------------------------------------------------------------------------------------- """
+
+""" Captura da Torre """
+label2 = tk.Label(root, text="Iniciar Captura da Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+label2.pack(pady=5, fill='x')
+
+button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 24), bg="#333", fg="#fff")
+button1.pack(pady=10)
+""" --------------------------------------------------------------------------------------------------------- """
+
+""" Processamento da Porta """
+label3 = tk.Label(root, text="Processar Porta", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+label3.pack(pady=5, fill='x')
+
+button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 24), bg="#333", fg="#fff")
+button1.pack(pady=10)
+""" --------------------------------------------------------------------------------------------------------- """
+
+""" Processamento da Torre """
+label4 = tk.Label(root, text="Processar Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+label4.pack(pady=5, fill='x')
+
+button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 24), bg="#333", fg="#fff")
+button1.pack(pady=10)
+""" --------------------------------------------------------------------------------------------------------- """
+
+""" Geração do Código RAPID """
+label5 = tk.Label(root, text="Gerar Código RAPID", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+label5.pack(pady=5, fill='x')
+
+button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 24), bg="#333", fg="#fff")
+button1.pack(pady=10)
+""" --------------------------------------------------------------------------------------------------------- """
 
 root.mainloop()
