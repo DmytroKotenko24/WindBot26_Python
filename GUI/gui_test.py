@@ -3,14 +3,30 @@ import tkinter as tk
 import subprocess
 import threading
 import os
+import shutil
 
 PADX = 10
 
-"""
-Create a GUI executable to run without an IDE:
+# Instructions to create executable with PyInstaller
+""" 
 -> uv pip install pyinstaller
 -> pyinstaller --onefile --noconsole GUI/gui_test.py
 -> Afterwards delete 'build' and 'gui_test.spec'
+"""
+
+# Cleanup generated folders at startup
+"""
+project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+
+folders_to_delete = [
+    os.path.join(project_root, "WindBot26", "GeneratedFiles_OCVCalculos_25"),
+    os.path.join(project_root, "WindBot26", "GeneratedFiles_OCVPorta_25"),
+    os.path.join(project_root, "WindBot26", "GeneratedFiles_OCVTorre_25"),
+]
+
+for folder in folders_to_delete:
+    if os.path.isdir(folder):
+        shutil.rmtree(folder)
 """
 
 project_root = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
@@ -127,28 +143,24 @@ label1 = tk.Label(root, text="Iniciar Captura da Porta", bg="#1e1e1e", fg="#ffff
 label1.pack(pady=5, fill='x', padx=PADX)
 button1 = tk.Button(root, text="Start", command=capturar_porta, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
 button1.pack(pady=2, anchor='w', padx=PADX)
-""" ----------------------- """
 
 """ Captura da Torre """
 label2 = tk.Label(root, text="Iniciar Captura da Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label2.pack(pady=5, fill='x', padx=PADX)
 button2 = tk.Button(root, text="Start", command=capturar_torre, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
 button2.pack(pady=2, anchor='w', padx=PADX)
-""" ----------------------- """
 
 """ Processamento """
 label3 = tk.Label(root, text="Processar Porta e Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label3.pack(pady=5, fill='x', padx=PADX)
 button_processar_ambos = tk.Button(root, text="Processar", font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=12, command=processar_porta_e_torre)
 button_processar_ambos.pack(pady=2, anchor='w', padx=PADX)
-""" ----------------------- """
 
 """ Geração do Código RAPID """
 label5 = tk.Label(root, text="Gerar Código RAPID", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label5.pack(pady=5, fill='x', padx=PADX)
 button5 = tk.Button(root, text="Start", command=gerar_codigo_rapid, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
 button5.pack(pady=2, anchor='w', padx=PADX)
-""" ----------------------- """
 
 def close_and_open_rapid_folder():
     rapid_folder = os.path.join(project_root, "WindBot26", "GeneratedFiles_OCVCalculos_25")
@@ -167,6 +179,6 @@ close_button = tk.Button(
     fg="#fff"
 )
 close_button.place(relx=1.0, rely=1.0, anchor='se', x=-PADX, y=-PADX)
-""" ----------------------- """
 
+""" Main Loop """
 root.mainloop()
