@@ -1,7 +1,9 @@
+import sys
 import tkinter as tk
 import subprocess
 import threading
 import os
+import tkinter.ttk as ttk
 
 PADX = 10
 
@@ -12,7 +14,7 @@ root = tk.Tk()
 root.tk.call('tk', 'scaling', 1.0)  # Set scaling to default
 root.title("WindBot'26")
 root.configure(bg="#1e1e1e")
-root.geometry("800x800")
+root.geometry("400x400")
 root.minsize(400, 400)  # Set minimal window size
 
 def capturar_porta():
@@ -61,46 +63,36 @@ def capturar_torre():
 
     threading.Thread(target=run_script, daemon=True).start()
 
-def processar_porta():
+def processar(tipo):
     progress_win = tk.Toplevel(root)
-    progress_win.title("Processing Port Progress")
+    if tipo == "porta":
+        progress_win.title("Processing Port Progress")
+        script = "OCVPorta_25.py"
+    else:
+        progress_win.title("Processing Tower Progress")
+        script = "OCVTorre_25.py"
+
     text = tk.Text(progress_win, height=20, width=80)
     text.pack()
+    progress = ttk.Progressbar(progress_win, orient="horizontal", length=400, mode="determinate", maximum=100)
+    progress.pack(pady=5)
 
     def run_script():
         process = subprocess.Popen(
-            ["python3", "OCVPorta_25.py"],
+            ["python3", script],
             stdout=subprocess.PIPE,
             stderr=subprocess.STDOUT,
             text=True,
             cwd=os.path.join(project_root, "WindBot26")
         )
         for line in process.stdout:
-            text.insert(tk.END, line)
-            text.see(tk.END)
-        process.wait()
-        text.insert(tk.END, "\nProcess completed.\n")
-        text.see(tk.END)
-
-    threading.Thread(target=run_script, daemon=True).start()
-
-def processar_torre():
-    progress_win = tk.Toplevel(root)
-    progress_win.title("Processing Tower Progress")
-    text = tk.Text(progress_win, height=20, width=80)
-    text.pack()
-
-    def run_script():
-        process = subprocess.Popen(
-            ["python3", "OCVTorre_25.py"],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            cwd=os.path.join(project_root, "WindBot26")
-        )
-        for line in process.stdout:
-            text.insert(tk.END, line)
-            text.see(tk.END)
+            if line.startswith("PROGRESS:"):
+                percent = int(line.strip().split(":")[1])
+                progress["value"] = percent
+                progress_win.update_idletasks()
+            else:
+                text.insert(tk.END, line)
+                text.see(tk.END)
         process.wait()
         text.insert(tk.END, "\nProcess completed.\n")
         text.see(tk.END)
@@ -146,20 +138,43 @@ button2 = tk.Button(root, text="Start", command=capturar_torre, font=("Arial", 1
 button2.pack(pady=2, anchor='w', padx=PADX)
 """ --------------------------------------------------------------------------------------------------------- """
 
-""" Processamento da Porta """
-label3 = tk.Label(root, text="Processar Porta", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
+""" Processamento """
+label3 = tk.Label(root, text="Processar Porta e Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label3.pack(pady=5, fill='x', padx=PADX)
 
-button3 = tk.Button(root, text="Start", command=processar_porta, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
-button3.pack(pady=2, anchor='w', padx=PADX)
-""" --------------------------------------------------------------------------------------------------------- """
+def processar_porta_e_torre():
+    progress_win = tk.Toplevel(root)
+    progress_win.title("Processando Porta e Torre")
+    text = tk.Text(progress_win, height=20, width=80)
+    text.pack()
 
-""" Processamento da Torre """
-label4 = tk.Label(root, text="Processar Torre", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
-label4.pack(pady=5, fill='x', padx=PADX)
+    def run_script(script, label):
+        text.insert(tk.END, f"\nIniciando {label}...\n")
+        text.see(tk.END)
+        process = subprocess.Popen(
+            ["python3", script],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            cwd=os.path.join(project_root, "WindBot26")
+        )
+        for line in process.stdout:
+            text.insert(tk.END, line)
+            text.see(tk.END)
+        process.wait()
+        text.insert(tk.END, f"\n{label} concluído.\n")
+        text.see(tk.END)
 
-button4 = tk.Button(root, text="Start", command=processar_torre, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
-button4.pack(pady=2, anchor='w', padx=PADX)
+    def run_both():
+        run_script("OCVPorta_25.py", "Processamento da Porta")
+        run_script("OCVTorre_25.py", "Processamento da Torre")
+        text.insert(tk.END, "\nProcessamento de ambos concluído.\n")
+        text.see(tk.END)
+
+    threading.Thread(target=run_both, daemon=True).start()
+
+button_processar_ambos = tk.Button(root, text="Processar", font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=12, command=processar_porta_e_torre)
+button_processar_ambos.pack(pady=2, anchor='w', padx=PADX)
 """ --------------------------------------------------------------------------------------------------------- """
 
 """ Geração do Código RAPID """
@@ -169,5 +184,22 @@ label5.pack(pady=5, fill='x', padx=PADX)
 button5 = tk.Button(root, text="Start", command=gerar_codigo_rapid, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
 button5.pack(pady=2, anchor='w', padx=PADX)
 """ --------------------------------------------------------------------------------------------------------- """
+
+def close_and_open_rapid_folder():
+    rapid_folder = os.path.join(project_root, "WindBot26", "GeneratedFiles_OCVCalculos_25")
+    # Open folder in file manager
+    subprocess.Popen(["xdg-open", rapid_folder])
+    root.destroy()
+    sys.exit()
+
+close_button = tk.Button(
+    root,
+    text="Close & Open RAPID Folder",
+    command=close_and_open_rapid_folder,
+    font=("Arial", 14),
+    bg="#d9534f",
+    fg="#fff"
+)
+close_button.place(relx=1.0, rely=1.0, anchor='se', x=-PADX, y=-PADX)
 
 root.mainloop()
