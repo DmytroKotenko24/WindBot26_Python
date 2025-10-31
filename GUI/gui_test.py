@@ -107,6 +107,29 @@ def processar_torre():
 
     threading.Thread(target=run_script, daemon=True).start()
 
+def gerar_codigo_rapid():
+    progress_win = tk.Toplevel(root)
+    progress_win.title("Generating RAPID Code Progress")
+    text = tk.Text(progress_win, height=20, width=80)
+    text.pack()
+
+    def run_script():
+        process = subprocess.Popen(
+            ["python3", "OCVCalculos_25.py"],
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+            text=True,
+            cwd=os.path.join(project_root, "WindBot26")
+        )
+        for line in process.stdout:
+            text.insert(tk.END, line)
+            text.see(tk.END)
+        process.wait()
+        text.insert(tk.END, "\nProcess completed.\n")
+        text.see(tk.END)
+
+    threading.Thread(target=run_script, daemon=True).start()
+
 """ Captura da Porta """
 label1 = tk.Label(root, text="Iniciar Captura da Porta", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label1.pack(pady=5, fill='x', padx=PADX)
@@ -143,7 +166,7 @@ button4.pack(pady=2, anchor='w', padx=PADX)
 label5 = tk.Label(root, text="Gerar Código RAPID", bg="#1e1e1e", fg="#ffffff", font=("Arial", 48), anchor='w')
 label5.pack(pady=5, fill='x', padx=PADX)
 
-button5 = tk.Button(root, text="Start", command=lambda: print("Gerar Código RAPID"), font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
+button5 = tk.Button(root, text="Start", command=gerar_codigo_rapid, font=("Arial", 16), bg="#333", fg="#fff", anchor='w', width=8)
 button5.pack(pady=2, anchor='w', padx=PADX)
 """ --------------------------------------------------------------------------------------------------------- """
 

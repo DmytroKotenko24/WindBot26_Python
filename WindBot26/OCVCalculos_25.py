@@ -8,12 +8,27 @@ import matplotlib.pyplot as plt
 from scipy.spatial.transform import Rotation
 from tqdm import tqdm
 
-# Configurações iniciais
-image_rearenged = np.load(r"/WindBot26\GeneratedFiles_OCVPorta_25\arraySCANPorta.npy")
-image_rearengedT = np.load(r"/WindBot26\GeneratedFiles_OCVTorre_25\arraySCANTorre.npy")
-maior_contorno_bag=np.load(r"/WindBot26\GeneratedFiles_OCVPorta_25\maiorContornoPorta.npy")
-contorno_bag_image=np.load(r"/WindBot26\GeneratedFiles_OCVPorta_25\contorno_bag_image.npy")
+script_dir = os.path.dirname(os.path.abspath(__file__))
+porta_dir = os.path.join(script_dir, 'GeneratedFiles_OCVPorta_25')
+torre_dir = os.path.join(script_dir, 'GeneratedFiles_OCVTorre_25')
+
+image_rearenged = np.load(os.path.join(porta_dir, "arraySCANPorta.npy"))
+image_rearengedT = np.load(os.path.join(torre_dir, "arraySCANTorre.npy"))
+maior_contorno_bag = np.load(os.path.join(porta_dir, "maiorContornoPorta.npy"))
+contorno_bag_image = np.load(os.path.join(porta_dir, "contorno_bag_image.npy"))
 enablePlot=False
+
+output_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'GeneratedFiles_OCVCalculos_25')
+os.makedirs(output_dir, exist_ok=True)
+
+"""
+# Configurações iniciais
+image_rearenged = np.load("WindBot26/GeneratedFiles_OCVPorta_25/arraySCANPorta.npy")
+image_rearengedT = np.load("WindBot26/GeneratedFiles_OCVTorre_25/arraySCANTorre.npy")
+maior_contorno_bag=np.load("WindBot26/GeneratedFiles_OCVPorta_25/maiorContornoPorta.npy")
+contorno_bag_image=np.load("WindBot26/GeneratedFiles_OCVPorta_25/contorno_bag_image.npy")
+enablePlot=False
+"""
 
 """Criacao pipeline"""
 BAG_FILE = "Bag_Scan_Porta.bag"
@@ -32,9 +47,9 @@ pipeline.start(config)
 
 # Obtém os parâmetros intrínsecos da câmera
 profile = pipeline.get_active_profile() # Obtêm o perfil de profundidade da câmera e outras câmeras se existirem
-intrinsics = profile.get_stream(rs.stream.depth).as_video_stream_profile().get_intrinsics()# Obtêm os parametros intrinsecos da câmera de profundidade 
+intrinsics = profile.get_stream(rs.stream.depth).as_video_stream_profile().get_intrinsics()# Obtêm os parametros intrinsecos da câmera de profundidade
 
-      
+
                                                                                             #(parâmetros essenciais para transformar as coordenadas 2D da imagem (pixeis) para coordenadas 3D
 fx = intrinsics.fx  # Comprimento focal em pixeis para a direção x
 fy = intrinsics.fy  # Comprimento focal em pixeis para a direção y
@@ -1462,7 +1477,7 @@ targetnumber11: int = 0
 #z: float = 1712.22
 #z: float = 1552.22
 #criar ficheiro txt para depois meter no rapid
-with open('GeneratedFiles_OCVCalculos_25/ficheiroRAPID_5', 'w') as ficheiro:
+with open('GeneratedFiles_OCVCalculos_25/ficheiroRAPID', 'w') as ficheiro:
     ##definir os targets no module 1
     ficheiro.write("MODULE AWIND1 \n")
     ficheiro.write("    PERS tooldata ClbTool:=[TRUE,[[0,0,340],[1,0,0,0]],[1,[0,0,120],[1,0,0,0],0,0,0]]; \n")
